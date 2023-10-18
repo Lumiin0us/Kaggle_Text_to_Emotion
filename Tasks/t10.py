@@ -6,12 +6,15 @@ from collections import defaultdict
 import numpy as np
 from numpy.linalg import norm
 from itertools import combinations
-# File path to the dataset
+
+#Loading dataset
 FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
+#unique sentiments in our dataset
 all_sentiments = twitter_df['sentiment'].unique()
 
+#calculating word2vec embeddings for each record or tweet of our sentiment(cat_1, cat_2) and storing them in "sentiment_vector_map"
 def calculate_word_embeddings_for_each_record(cat_1, cat_2):
     all_sentiments = []
     all_sentiments.append(cat_1)
@@ -36,7 +39,7 @@ def calculate_word_embeddings_for_each_record(cat_1, cat_2):
 
     return sentiment_vector_map
 
-
+#calculating word2vec embeddings for the overall tweet_list of our sentiment(cat_1, cat_2) and storing them in "sentiment_vector_map"
 def calculate_word_embeddings_for_overall_list(cat_1, cat_2):
     all_sentiments = []
     all_sentiments.append(cat_1)
@@ -62,6 +65,10 @@ def calculate_word_embeddings_for_overall_list(cat_1, cat_2):
 
     return sentiment_vector_map, cat_1, cat_2
 
+#comparing the two and calculating the cosine similarities between them, here we faced an issue, where the total vectors were equal to the length of 
+#the records in that particular column and then each vector had 100 embeddings whereas for overall list word2vec model there was only 1 vector output
+#since we calculated the word2vec for the whole list, therefore to normalize the tweet_vectors we averaged every vector for the record list and formed a 100
+#vector matrix and finally calculated the similarity.
 def calculate_cosine_similarities(word_embeddings_dict, list_embeddings_dict, cat_1, cat_2):
     all_sentiments = []
     all_sentiments.append(cat_1)
@@ -80,12 +87,8 @@ def calculate_cosine_similarities(word_embeddings_dict, list_embeddings_dict, ca
         similarities.append((all_sentiments[index_of_sentiment], cosine_similarity))
 
     return similarities
-# list_embeddings_dict, cat_1, cat_2 = calculate_word_embeddings_for_overall_list('empty', 'sadness')
-# word_embeddings_dict = calculate_word_embeddings_for_each_record('empty', 'sadness')
 
-# similarities = calculate_cosine_similarities(list_embeddings_dict=list_embeddings_dict, word_embeddings_dict=word_embeddings_dict, cat_1=cat_1, cat_2=cat_2)
-# print(similarities)
-
+#displaying the cosine-similarties between each category
 def record_based_similarity_between_each_pair(all_sentiments):
     for pairs in combinations(all_sentiments, 2):
         list_embeddings_dict, cat_1, cat_2 = calculate_word_embeddings_for_overall_list(pairs[0], pairs[1])
@@ -94,3 +97,6 @@ def record_based_similarity_between_each_pair(all_sentiments):
         print(similarities)
 
 record_based_similarity_between_each_pair(all_sentiments=all_sentiments)
+
+
+#Task 10 is incomplete (We need to discuss the matching outcomes of the categories)

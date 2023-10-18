@@ -4,7 +4,7 @@ from gensim.models import Word2Vec
 import numpy as np
 from numpy.linalg import norm
 
-# File path to the dataset
+#Loading the dataset
 FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
@@ -20,6 +20,7 @@ def get_sentiments_and_calculate_similarities(twitter_df):
     # Merge small categories based on calculated cosine_similarities
     merge_small_categories(twitter_df, all_sentiments, small_categories, cosine_similarities)
 
+#Training the word2vec model with all the columns/labels of our dataset and afterwards calculating the cosine similarities between them
 def calculate_similarities(all_sentiments):
     cosine_similarities = {}
     sentiment_list = all_sentiments.copy()
@@ -31,13 +32,16 @@ def calculate_similarities(all_sentiments):
     for sentiment_index in range(len(sentiment_list)):
         for iter in range(sentiment_index + 1, len(sentiment_list)):
             cosine_similarities[(sentiment_list[sentiment_index], sentiment_list[iter])] = np.dot(word2vec_model.wv[sentiment_list[sentiment_index]], word2vec_model.wv[sentiment_list[iter]])/(norm(word2vec_model.wv[sentiment_list[sentiment_index]]) * norm(word2vec_model.wv[sentiment_list[iter]]))
-    # print(word2vec_model.wv['hate'])
     return cosine_similarities
 
+#displaying the output-table
 def display_similarity_table(cosine_similarities):
     df_table = pd.DataFrame(cosine_similarities, index=['Cosine Similarities'])
     print(df_table)
 
+#same as task-8 merging categories(follows that same logic) but this time the thresold is set to 0.01, word2vec works better on large data and since we only 
+#provided it with labels, so i believe that because of that the cosine similarity between the labels was low (will need to re-check the code and logic before
+#submitting this)
 def merge_small_categories(twitter_df, all_sentiments, small_categories, cosine_similarities):
     merging_threshold = 0.01
 
@@ -92,6 +96,6 @@ def merge_small_categories(twitter_df, all_sentiments, small_categories, cosine_
         col_name += '_' + labels
     new_sentiment_df = new_sentiment_df.rename(columns={list(other_categories.keys())[0]: col_name})
     
-    print(new_sentiment_df.head())
+    print(new_sentiment_df.columns.unique())
     
 get_sentiments_and_calculate_similarities(twitter_df)

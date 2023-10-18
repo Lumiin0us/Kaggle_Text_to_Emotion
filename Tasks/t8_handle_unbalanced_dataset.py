@@ -3,7 +3,7 @@ from nltk.corpus import wordnet as wn
 from itertools import combinations
 from collections import Counter
 
-# File path to the dataset
+# loading dataset
 FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
@@ -18,6 +18,7 @@ def get_sentiments_and_calculate_similarities(twitter_df):
     # Merge small categories based on calculated similarities
     merge_small_categories(twitter_df, all_sentiments, small_categories, similarities)
 
+#we are calculating similarities based on wordnet synsets, checking each possible lemma combinations and using wu-palmer similarity between them to get a score
 def calculate_similarities(all_sentiments):
     similarities = {}
     for pair in combinations(all_sentiments, 2):
@@ -34,10 +35,15 @@ def calculate_similarities(all_sentiments):
                     similarities[pair] = [lemma_1, lemma_2, round(max_similarity_score, 3), round((mean_score)/(len(synset_1) * len(synset_2)), 3)]
     return similarities
 
+#displaying the similarities 
 def display_similarity_table(similarities):
     df_table = pd.DataFrame(similarities, index=['Best Matching Synsets', 'Best Matching Synsets', 'Maximum Similarity', 'Mean Similarity'])
     print(df_table)
 
+#after getting the similarities between each category now we are merging the smallest categories based on their wu-palmer scores
+#category which is the most common and has a good similarity with other categories is picked first if say there are two categories and both have 
+#similar number of pairs with other categories then their mean similarity score is checked and the higher one performs the merger.
+#This is a general idea, we can make improvements with this approach..
 def merge_small_categories(twitter_df, all_sentiments, small_categories, similarities):
     merging_threshold = 0.4
 
@@ -90,6 +96,6 @@ def merge_small_categories(twitter_df, all_sentiments, small_categories, similar
         col_name += '_' + labels
     new_sentiment_df = new_sentiment_df.rename(columns={merging_cat: col_name})
     
-    print(new_sentiment_df.head())
+    print(new_sentiment_df.columns.unique())
     
 get_sentiments_and_calculate_similarities(twitter_df)
