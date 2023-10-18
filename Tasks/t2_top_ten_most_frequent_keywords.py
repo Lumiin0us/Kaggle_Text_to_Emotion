@@ -9,7 +9,6 @@ DATASET = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/K
 
 #reading the dataset
 df = pd.read_csv(DATASET)
-# print(df.head())
 
 #creating a dictionary -> sentiments : [list of tweets of that particular sentiment]
 sentiments_dict = {}
