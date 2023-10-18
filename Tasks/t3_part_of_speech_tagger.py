@@ -19,51 +19,21 @@ for index, row in df.iterrows():
         dict[emotion][0] += (row['content']) 
 df_list = pd.DataFrame.from_dict(dict)
 
-print(df_list)
-
-#Task 3 
-#POS Tagger
+#Task 3 POS Tagger
 pos_tagger_dict_unigram = {}
 pos_tagger_dict_penn_treebank = {}
 
-
-# for col in df_list.columns:
-#     text = word_tokenize(df_list.loc[0][col])
-#     pos_tagger_dict[col] = nltk.pos_tag(text)
-# print(pos_tagger_dict['empty'])
-
-
-
-
-# sentence = "Although the weather forecast predicted rain for the weekend, we decided to go camping, and we brought plenty of waterproof gear just in case the skies opened up."
-# sentence = word_tokenize(sentence)
-
-# # Load the test set
-# test_set = nltk.corpus.brown.tagged_sents()
-
-# #Perceptron Tagger(Default)
-# # pos_tag = nltk.pos_tag(test_set)
-# # print(pos_tag)
-# # nltk.help.upenn_tagset()
-# tagger = nltk.PerceptronTagger()
-# tagg = tagger.tag(test_set)
-# print(tagg)
-# print('Accuracy', nltk.accuracy(tagg, test_set))
-
-# default_tagger = nltk.DefaultTagger('NN')
-# default_pred = default_tagger.tag(test_set)
-# print(default_pred)
-# print('Accuracy', default_tagger.accuracy(test_set))
-# # print(len(tagger.classes))
-
+#example sentence
 sentence = 'The lazy brown fox jumped over the fence'
 sentence = word_tokenize(sentence)
+
+#golden tagset
 tagged_sents = treebank.tagged_sents()
 
-#!Unigram Tagger (Our choice)
+#Unigram Tagger (Our choice)
 unigram_tagger = nltk.UnigramTagger(tagged_sents)
 
-#!45 Penn Tree Bank Tagger (In question)
+#45 Penn Tree Bank Tagger (In question), perceptronTagger uses 45 Penn Tree Bank for its POS tagging
 perceptron_tagger = nltk.PerceptronTagger()
 
 top_five_most_occuring_pos_tags_unigram = defaultdict(lambda: 0)
@@ -71,16 +41,15 @@ top_five_most_occuring_pos_tags_perceptron = defaultdict(lambda: 0)
 
 def total_tags_sum(l):
     sum = 0 
-    # new_list = []
     for index, items in enumerate(l):
-        # new_list.append((key, items))
         sum += int(items[1])
-    # print(l)
+
     new_list = l[0: 5].copy()
     for index, items in enumerate(new_list):
         new_list[index] = (items[0], str(round((int(items[1]) /sum) * 100, 3)) + '%')
     return new_list
 
+#iterating over all the columns and picking the contcatenated tweet content and applying the POS tagging, the results are expressed as percentage
 for col in df_list.columns:
     text = word_tokenize(df_list.loc[0][col])
     pos_tagger_dict_unigram[col] = unigram_tagger.tag(text)
@@ -101,8 +70,6 @@ for col in df_list.columns:
     top_five_occurences_perceptron =  sorted(top_five_most_occuring_pos_tags_perceptron.items(), key=lambda x: x[1], reverse=True)
     print(f'Most dominant tags in [{col}] USING [UNIGRAM_TAGGER]: ', total_tags_sum(top_five_occurences_unigram))
     print(f'Most dominant tags in [{col}] USING [PERCEPTRON_TAGGER]: ', total_tags_sum(top_five_occurences_perceptron))
-# print(top_five_occurences_unigram[: 5])
-# print(top_five_occurences_perceptron[: 5])
 
 
 
