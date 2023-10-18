@@ -2,6 +2,7 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from scipy.stats import pearsonr
 
+#loading both datasets
 FILEPATH_NRC = "/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/NRC-Emotion-Lexicon/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"
 nrc_df = pd.read_csv(FILEPATH_NRC,  names=["word", "emotion", "association"], skiprows=45, sep='\t')
 total_emotions = nrc_df['emotion'].unique()
@@ -25,9 +26,11 @@ sentiment_mapping = {
     "boredom": ['sadness', 'negative'],
     "relief": ['trust', 'positive'],
 }
+#initializing V1 and V2
 vector_1 = {key: [] for key, value in sentiment_mapping.items()}
 vector_2 = {key: [] for key, value in sentiment_mapping.items()}
 
+#matching datasets' records and finding correlation/p-value between matched words
 def compare_sentiment(sentiment_mapping):
     correlation_table = {}
     for key, value in sentiment_mapping.items():
@@ -64,11 +67,11 @@ pearson_correlation_table = compare_sentiment(sentiment_mapping=sentiment_mappin
 df_table = pd.DataFrame(pearson_correlation_table, index=['Pearson Correlation', 'P-Value'])
 print(df_table)
 
-#! Analysis 
+# Analysis 
 # Very low P-values for all the sentiments indicate that none of the correlation is random instead all are statistically significant. Additionally, positive
 # pearson correlation values show that the vectors have a positive linear relationship.
 
-#! notes
+# notes
 # correlation ranges from [-1, 1] => 1 represents a perfect positive linear correlation, -1 represents a perfect negative linear correlation and 0 represents
 # no correlation 
 # low P-value (< 0.05) represents that the relation between the vectors is statistically signifcant and not through random chances 
