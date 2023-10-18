@@ -1,5 +1,4 @@
 import pandas as pd 
-import nltk
 from nltk.corpus import wordnet as wn, stopwords
 from nltk.tokenize import word_tokenize
 
@@ -20,7 +19,7 @@ df_list = pd.DataFrame.from_dict(dict)
 
 # print(df_list.head())
 
-#checking for entry in wordnet 
+#checking for entry in wordnet using synsets
 stopwords_list = stopwords.words('english')
 table = {}
 for col in df_list.columns:
@@ -36,8 +35,7 @@ for col in df_list.columns:
         else:
             no_entry += 1
     table[col] = (entry, no_entry, str(round((no_entry * 100)/(entry + no_entry), 3)) + '%')
-# print(table)
 
 #outputting as a table
-df_table = pd.DataFrame(table, ['Identified Entries', 'Unidentified Entries', 'Percentage'])
+df_table = pd.DataFrame(table, ['Identified Entries', 'Unidentified Entries', 'Percentage (Unidentified)'])
 print(df_table)
