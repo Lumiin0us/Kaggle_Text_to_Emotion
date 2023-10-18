@@ -72,6 +72,3 @@ for col in df_list.columns:
     print(f'Most dominant tags in [{col}] USING [PERCEPTRON_TAGGER]: ', total_tags_sum(top_five_occurences_perceptron))
 
 
-
-# print('Most dominant tags [UNIGRAM_TAGGER]: ', total_tags_sum(top_five_occurences_unigram))
-# print('Most dominant tags [PERCEPTRON_TAGGER]: ', total_tags_sum(top_five_occurences_perceptron))

@@ -72,3 +72,34 @@ for col in df_list.columns:
     text = [words.lower() for words in text if not words.lower() in stopwords_list]
     most_frequent_words_after[col] = FreqDist(text).most_common(10)
 print('[MOST FREQUENT WORDS AFTER PREPROCESSING]: \n', most_frequent_words_after)
+
+def output_as_percentage(most_frequent_words_before, most_frequent_words_after):
+    total_words_before = 0
+    total_words_after = 0
+
+#counting total words to calculate the percentage
+    for sentiment, occurences in most_frequent_words_before.items():
+        for word, frequency in occurences:
+            total_words_before += frequency
+    for sentiment, occurences in most_frequent_words_after.items():
+        for word, frequency in occurences:
+            total_words_after += frequency
+    for sentiment, occurences in most_frequent_words_before.items():
+        for index in range(len(occurences)):
+            most_frequent_words_before[sentiment][index] = list(most_frequent_words_before[sentiment][index])
+            most_frequent_words_before[sentiment][index][1] = str(round((most_frequent_words_before[sentiment][index][1] * 100)/ total_words_before, 3)) + '%'
+            most_frequent_words_before[sentiment][index] = tuple(most_frequent_words_before[sentiment][index])
+    for sentiment, occurences in most_frequent_words_after.items():
+        for index in range(len(occurences)):
+            most_frequent_words_after[sentiment][index] = list(most_frequent_words_after[sentiment][index])
+            most_frequent_words_after[sentiment][index][1] = str(round((most_frequent_words_after[sentiment][index][1] * 100)/ total_words_after, 3)) + '%'
+            most_frequent_words_after[sentiment][index] = tuple(most_frequent_words_after[sentiment][index])
+
+    
+    print()
+    print('[MOST FREQUENT WORDS BEFORE PREPROCESSING AS %]: \n', most_frequent_words_before)
+    print()
+    print('[MOST FREQUENT WORDS AFTER PREPROCESSING AS %]: \n', most_frequent_words_after)
+
+
+output_as_percentage(most_frequent_words_before=most_frequent_words_before, most_frequent_words_after=most_frequent_words_after)
