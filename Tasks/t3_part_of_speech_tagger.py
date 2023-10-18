@@ -1,13 +1,15 @@
 import pandas as pd 
 import nltk
 from nltk.tokenize import word_tokenize
+from collections import defaultdict
+from nltk.corpus import treebank
 
 DATASET = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
 
 #reading the dataset
 df = pd.read_csv(DATASET)
 
-#Task 2 
+#From Task 2 - sentiment dataframes with col as sentiments and rows as concatenated content
 dict = {}
 for index, row in df.iterrows():
     emotion = row['sentiment']
@@ -17,7 +19,7 @@ for index, row in df.iterrows():
         dict[emotion][0] += (row['content']) 
 df_list = pd.DataFrame.from_dict(dict)
 
-print(df_list.head())
+print(df_list)
 
 #Task 3 
 #POS Tagger
@@ -54,9 +56,6 @@ pos_tagger_dict_penn_treebank = {}
 # print('Accuracy', default_tagger.accuracy(test_set))
 # # print(len(tagger.classes))
 
-
-from nltk.corpus import treebank
-
 sentence = 'The lazy brown fox jumped over the fence'
 sentence = word_tokenize(sentence)
 tagged_sents = treebank.tagged_sents()
@@ -64,17 +63,9 @@ tagged_sents = treebank.tagged_sents()
 #!Unigram Tagger (Our choice)
 unigram_tagger = nltk.UnigramTagger(tagged_sents)
 
-# unigram_tagger_pred = unigram_tagger.tag(sentence)
-# print(unigram_tagger_pred)
-# print('Accuracy', unigram_tagger.accuracy(tagged_sents))
-
 #!45 Penn Tree Bank Tagger (In question)
 perceptron_tagger = nltk.PerceptronTagger()
 
-# perceptron_tagger_pred = perceptron_tagger.tag(sentence)
-# print(perceptron_tagger_pred)
-# print('Accuracy', perceptron_tagger.accuracy(tagged_sents))
-from collections import defaultdict
 top_five_most_occuring_pos_tags_unigram = defaultdict(lambda: 0)
 top_five_most_occuring_pos_tags_perceptron = defaultdict(lambda: 0)
 
