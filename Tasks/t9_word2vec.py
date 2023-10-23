@@ -5,7 +5,7 @@ import numpy as np
 from numpy.linalg import norm
 
 #Loading the dataset
-FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
+FILEPATH_TWEETS = "Dataset/tweet_emotions.csv"
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
 def get_sentiments_and_calculate_similarities(twitter_df):

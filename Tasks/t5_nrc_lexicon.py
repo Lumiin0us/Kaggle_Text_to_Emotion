@@ -3,11 +3,11 @@ from nltk.tokenize import word_tokenize
 from scipy.stats import pearsonr
 
 #loading both datasets
-FILEPATH_NRC = "/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/NRC-Emotion-Lexicon/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"
+FILEPATH_NRC = "Dataset/NRC-Emotion-Lexicon/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"
 nrc_df = pd.read_csv(FILEPATH_NRC,  names=["word", "emotion", "association"], skiprows=45, sep='\t')
 total_emotions = nrc_df['emotion'].unique()
 
-FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv' 
+FILEPATH_TWEETS = "Dataset/tweet_emotions.csv" 
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
 #mapping sentiments keys are twitter sentiments and values are nrc sentiments - (categories they may belong to)

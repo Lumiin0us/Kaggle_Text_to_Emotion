@@ -8,7 +8,7 @@ from numpy.linalg import norm
 from itertools import combinations
 
 #Loading dataset
-FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
+FILEPATH_TWEETS = "Dataset/tweet_emotions.csv"
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
 #unique sentiments in our dataset

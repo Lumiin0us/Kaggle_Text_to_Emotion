@@ -4,8 +4,7 @@ from collections import Counter
 import pandas as pd 
 import numpy as np
 
-DATASET = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv'
-
+DATASET = "Dataset/tweet_emotions.csv"
 #reading the dataset
 df = pd.read_csv(DATASET)
 

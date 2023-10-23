@@ -3,7 +3,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import json 
 
 #reading dataset
-FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv' 
+FILEPATH_TWEETS = "Dataset/tweet_emotions.csv" 
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
 sentiment_label_list = list(twitter_df['sentiment'].unique())

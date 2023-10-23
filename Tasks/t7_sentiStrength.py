@@ -3,7 +3,7 @@ from sentistrength import PySentiStr
 import json 
 
 #loading dataset
-FILEPATH_TWEETS = '/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/Dataset/tweet_emotions.csv' 
+FILEPATH_TWEETS = "Dataset/tweet_emotions.csv" 
 twitter_df = pd.read_csv(FILEPATH_TWEETS)
 
 #saving the column/label names of twitter_df dataset that we imported
@@ -13,8 +13,8 @@ sentiment_label_dict = {}
 
 #initializing sentiStrength analyzer
 senti = PySentiStr()
-senti.setSentiStrengthPath('/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/util/SentiStrength.jar')
-senti.setSentiStrengthLanguageFolderPath('/Users/abdurrehman/Desktop/Oulu Courses /NLP/kaggle_text_to_emotion/Kaggle_Text_to_Emotion/util/SentiStrength_Data')
+senti.setSentiStrengthPath('util/SentiStrength.jar')
+senti.setSentiStrengthLanguageFolderPath('util/SentiStrength_Data')
 
 #checking the sentiment of the labels/columns of our dataset
 for sentiment in sentiment_label_list:
