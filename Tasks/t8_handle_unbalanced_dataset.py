@@ -12,8 +12,8 @@ def get_sentiments_and_calculate_similarities(twitter_df):
     all_sentiments = list(twitter_df['sentiment'].unique())
     small_categories = [sentiment for sentiment in all_sentiments if len(twitter_df[twitter_df['sentiment'] == sentiment]) < 1500]
 
-    similarities = calculate_similarities(all_sentiments)
-    display_similarity_table(similarities)
+    similarities, similarities_map = calculate_similarities(all_sentiments)
+    display_similarity_table(similarities, similarities_map)
 
     # Merge small categories based on calculated similarities
     merge_small_categories(twitter_df, all_sentiments, small_categories, similarities)
@@ -21,6 +21,13 @@ def get_sentiments_and_calculate_similarities(twitter_df):
 #we are calculating similarities based on wordnet synsets, checking each possible lemma combinations and using wu-palmer similarity between them to get a score
 def calculate_similarities(all_sentiments):
     similarities = {}
+    similarities_map = {
+        'Synset_1': [],
+        'Synset_2': [],
+        'PoS_s1': [],
+        'PoS_s2': [],
+        'Maximum_Similarity_Score': [],
+    }
     for pair in combinations(all_sentiments, 2):
         synset_1 = wn.synsets(pair[0])
         synset_2 = wn.synsets(pair[1])
@@ -33,11 +40,18 @@ def calculate_similarities(all_sentiments):
                 if max_similarity_score < similarity_score:
                     max_similarity_score = similarity_score
                     similarities[pair] = [lemma_1, lemma_2, round(max_similarity_score, 3), round((mean_score)/(len(synset_1) * len(synset_2)), 3)]
-    return similarities
+                    similarities_map['Synset_1'].append(lemma_1.lemmas()[0].name())
+                    similarities_map['Synset_2'].append(lemma_2.lemmas()[0].name())
+                    similarities_map['PoS_s1'].append(lemma_1.pos())
+                    similarities_map['PoS_s2'].append(lemma_2.pos())
+                    similarities_map['Maximum_Similarity_Score'].append(round(max_similarity_score, 3))
+                    
+    return similarities, similarities_map
 
 #displaying the similarities 
-def display_similarity_table(similarities):
-    df_table = pd.DataFrame(similarities, index=['Best Matching Synsets', 'Best Matching Synsets', 'Maximum Similarity', 'Mean Similarity'])
+def display_similarity_table(similarities, similarities_map):
+#     df_table = pd.DataFrame(similarities, index=['Best Matching Synsets', 'Best Matching Synsets', 'Maximum Similarity', 'Mean Similarity'])
+    df_table = pd.DataFrame(similarities_map)
     print(df_table)
 
 #after getting the similarities between each category now we are merging the smallest categories based on their wu-palmer scores
@@ -46,7 +60,6 @@ def display_similarity_table(similarities):
 #This is a general idea, we can make improvements with this approach..
 def merge_small_categories(twitter_df, all_sentiments, small_categories, similarities):
     merging_threshold = 0.4
-
     merge_categories_matched = []
     merge_mean = []
 
@@ -96,6 +109,6 @@ def merge_small_categories(twitter_df, all_sentiments, small_categories, similar
         col_name += '_' + labels
     new_sentiment_df = new_sentiment_df.rename(columns={merging_cat: col_name})
     
-    print(new_sentiment_df.columns.unique())
+#     print(new_sentiment_df.columns.unique())
     
 get_sentiments_and_calculate_similarities(twitter_df)
