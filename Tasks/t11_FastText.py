@@ -1,5 +1,5 @@
 import pandas as pd
-from gensim.models import Word2Vec
+from gensim.models import FastText
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from collections import defaultdict
@@ -19,7 +19,7 @@ def calculate_word_embeddings_for_each_record(cat_1, cat_2):
     all_sentiments = []
     all_sentiments.append(cat_1)
     all_sentiments.append(cat_2)
-    sentiment_vector_map = defaultdict(lambda:[])
+    sentiment_vector_map = defaultdict(lambda: [])
     stopwords_list = stopwords.words('english')
     for sentiment in all_sentiments:
         tweet_list = list(twitter_df.loc[twitter_df['sentiment'] == sentiment]['content'])
@@ -30,12 +30,12 @@ def calculate_word_embeddings_for_each_record(cat_1, cat_2):
             if tweet:
                 vector_sum = 0.0
                 wordlist_length = 0
-                word2vec_model = Word2Vec([tweet], min_count=1)
+                fasttext_model = FastText(sentences=[tweet], min_count=1)
                 for word in tweet:
-                    vector = word2vec_model.wv[word]
+                    vector = fasttext_model.wv[word]
                     wordlist_length += 1
                     vector_sum += vector
-                sentiment_vector_map[sentiment].append((vector_sum)/wordlist_length)
+                sentiment_vector_map[sentiment].append((vector_sum) / wordlist_length)
 
     return sentiment_vector_map
 
@@ -47,28 +47,25 @@ def calculate_word_embeddings_for_overall_list(cat_1, cat_2):
     sentiment_map = {}
     sentiment_vector_map = defaultdict(list)
     stopwords_list = stopwords.words('english')
-    for sentiment in all_sentiments: 
+    for sentiment in all_sentiments:
         tweet_list = list(twitter_df.loc[twitter_df['sentiment'] == sentiment]['content'])
         for index, tweet in enumerate(tweet_list):
             tweet = word_tokenize(tweet)
             tweet = [words.lower() for words in tweet if words.lower() not in stopwords_list]
             tweet_list[index] = tweet
-            
+
         vector_sum = 0.0
         tweetlist_length = len(tweet_list)
-        word2vec_model = Word2Vec(tweet_list, min_count=1)
+        fasttext_model = FastText(sentences=tweet_list, min_count=1)
         for tweet in tweet_list:
-            for word in tweet: 
-                vector_sum += word2vec_model.wv[word]
-        sentiment_vector_map[sentiment].append((vector_sum)/tweetlist_length)
+            for word in tweet:
+                vector_sum += fasttext_model.wv[word]
+        sentiment_vector_map[sentiment].append((vector_sum) / tweetlist_length)
         sentiment_map[sentiment] = tweet_list
 
     return sentiment_vector_map, cat_1, cat_2
 
-#comparing the two and calculating the cosine similarities between them, here we faced an issue, where the total vectors were equal to the length of 
-#the records in that particular column and then each vector had 100 embeddings whereas for overall list word2vec model there was only 1 vector output
-#since we calculated the word2vec for the whole list, therefore to normalize the tweet_vectors we averaged every vector for the record list and formed a 100
-#vector matrix and finally calculated the similarity.
+
 def calculate_cosine_similarities(word_embeddings_dict, list_embeddings_dict, cat_1, cat_2):
     similarities = []  # Initialize an empty list to store all similarities
     all_sentiments = [cat_1, cat_2]

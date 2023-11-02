@@ -20,7 +20,7 @@ sentiments = dict(sentiments_dict)
 plt.figure(figsize=(8, 8))
 bins = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
 y_ticks = [1, 2, 3, 4, 5]
-plt.hist(sentiments.values(), bins=bins, ec='black', color='blue', alpha=0.5, rwidth=0.8)
+plt.hist(sentiments.values(), bins=bins, ec='black', color='pink', alpha=0.5, rwidth=0.8)
 plt.title('Frequency distribution of the dataset')
 plt.xlabel('Sentiments')
 plt.xticks(bins)
@@ -28,7 +28,7 @@ plt.ylabel('Frequencies')
 plt.yticks(y_ticks)
 labels = {k: v for k, v in sorted(sentiments.items(), key=lambda item: item[1])}
 labels = [f'{key} : {value}' for key, value in labels.items()]
-handles = [Rectangle((0, 0), 1, 1, color='blue', alpha=0.5, ec='blue') for label in labels]
+handles = [Rectangle((0, 0), 1, 1, color='pink', alpha=0.5, ec='black') for label in labels]
 plt.legend(handles, labels)
 plt.show()
 

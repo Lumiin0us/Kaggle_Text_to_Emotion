@@ -40,8 +40,7 @@ def display_similarity_table(cosine_similarities):
     print(df_table)
 
 #same as task-8 merging categories(follows that same logic) but this time the thresold is set to 0.01, word2vec works better on large data and since we only 
-#provided it with labels, so i believe that because of that the cosine similarity between the labels was low (will need to re-check the code and logic before
-#submitting this)
+#provided it with labels, so i believe that because of that the cosine similarity between the labels was low
 def merge_small_categories(twitter_df, all_sentiments, small_categories, cosine_similarities):
     merging_threshold = 0.01
 
